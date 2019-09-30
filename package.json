@@ -1,0 +1,10 @@
+{
+  "name": "pwa-playground",
+  "version": "1.0.0",
+  "description": "Repo contains pwa examples",
+  "main": "index.js",
+  "repository": "git@github.com:dimitardanailov/pwa-playground.git",
+  "author": "Dimitar Danailov<dimityr.danailov@gmail.com>",
+  "license": "MIT",
+  "private": true
+}

@@ -1,0 +1,22 @@
+{
+  "name": "indexeddb",
+  "version": "1.0.0",
+  "description": "PWA indexeddb playground",
+  "keywords": [
+    "indexeddb",
+    "pwa"
+  ],
+  "author": "Dimitar Danailov <dimityr.danailov@gmail.com>",
+  "homepage": "https://github.com/dimitardanailov/pwa-playground#readme",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimitardanailov/pwa-playground.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/dimitardanailov/pwa-playground/issues"
+  }
+}

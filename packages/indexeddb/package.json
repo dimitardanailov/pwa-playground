@@ -32,5 +32,8 @@
     "eslint-plugin-react": "^7.15.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "idb": "^4.0.4"
   }
 }

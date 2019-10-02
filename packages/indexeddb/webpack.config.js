@@ -1,6 +1,5 @@
-import { APP_DIR, DIST_DIR } from './utils/folders';
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { APP_DIR, DIST_DIR } = require('./utils/folders');
 
 module.exports = {
   entry: {

@@ -1,5 +1,7 @@
 import { APP_DIR, DIST_DIR } from './utils/folders';
 
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
   entry: {
     main: `${APP_DIR}/index.js`,
@@ -29,4 +31,12 @@ module.exports = {
     hot: true,
     hotOnly: true,
   },
+
+  plugins: [
+    // https://webpack.js.org/plugins/html-webpack-plugin/
+    new HtmlWebpackPlugin({
+      title: 'PWA IndexedDB playground',
+      template: `${APP_DIR}/index.html`,
+    }),
+  ],
 };

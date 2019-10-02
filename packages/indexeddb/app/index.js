@@ -1,3 +1,5 @@
-window.addEventListener('load', () => {
-  console.log('Hello load ...');
+import articleStore from './IndexedDB/article-store';
+
+window.addEventListener('load', async () => {
+  await articleStore();
 });

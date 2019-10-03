@@ -15,6 +15,9 @@
   },
   "scripts": {
     "clean": "rm -rf dist",
+    "create-dist-folder": "mkdir -p dist",
+    "copy": "yarn run create-dist-folder && yarn run copy:service-worker",
+    "copy:service-worker": "cp app/sw.js dist/",
     "start": "webpack-dev-server --open",
     "webpack": "./node_modules/.bin/webpack"
   },

@@ -1,5 +1,4 @@
-import articleStore from './IndexedDB/article-store';
-
 window.addEventListener('load', async () => {
-  await articleStore();
+  const titleTextField = document.getElementById('title');
+  const articleSubmitButton = document.getElementById('articleSubmitButton');
 });

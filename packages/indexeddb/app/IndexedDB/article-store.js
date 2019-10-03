@@ -14,15 +14,24 @@ async function initDB() {
       });
       // Create an index on the 'date' property of the objects.
       store.createIndex('date', 'date');
+
+      store.createIndex('title', 'title', { unique: true });
     },
   });
 
   return db;
 }
 
+async function findArticlesByIndex(db, indexName, search) {
+  const index = db.transaction(storeName).store.index(indexName);
+  const records = index.get(search);
+
+  return records;
+}
+
 async function findArticleByTitle(db, title) {
   let article = null;
-  const tx = db.transaction(storeName);
+  const tx = db.transaction(storeName, 'readonly');
 
   for await (const cursor of tx.store) {
     if (cursor.value.title === title) article = cursor.value;
@@ -31,4 +40,4 @@ async function findArticleByTitle(db, title) {
   return article;
 }
 
-export { initDB, findArticleByTitle };
+export { initDB, findArticleByTitle, findArticlesByIndex, deleteArticleDB };

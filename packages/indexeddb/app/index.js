@@ -1,4 +1,8 @@
-import { initDB, findArticleByTitle } from './IndexedDB/article-store';
+import {
+  initDB,
+  findArticleByTitle,
+  findArticlesByIndex,
+} from './IndexedDB/article-store';
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
@@ -19,6 +23,9 @@ if ('serviceWorker' in navigator) {
         if (dbArticle === null) {
           navigator.serviceWorker.controller.postMessage(article);
         }
+
+        const dbArticles = await findArticlesByIndex(db, 'title', article);
+        console.log('articles', dbArticles);
       });
     });
   });

@@ -9,6 +9,9 @@ if ('serviceWorker' in navigator) {
       articleSubmitButton.addEventListener('click', async e => {
         e.preventDefault();
         const article = titleTextField.value;
+
+        // Send message to service worker
+        navigator.serviceWorker.controller.postMessage(article);
       });
     });
   });

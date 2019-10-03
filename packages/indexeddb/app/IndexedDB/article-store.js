@@ -1,10 +1,12 @@
-import { openDB } from 'idb';
+import { openDB } from 'idb/with-async-ittr.js';
 
-async function articleStore() {
+const storeName = 'articles';
+
+async function initDB() {
   const db = await openDB('Articles', 1, {
     upgrade(_db) {
       // Create a store of objects
-      const store = _db.createObjectStore('articles', {
+      const store = _db.createObjectStore(storeName, {
         // The 'id' property of the object will be the key.
         keyPath: 'id',
         // If it isn't explicitly set, create a value by auto incrementing.
@@ -15,45 +17,18 @@ async function articleStore() {
     },
   });
 
-  // Add an article:
-  await db.add('articles', {
-    title: 'Article 1',
-    date: new Date('2019-01-01'),
-    body: '…',
-  });
-
-  // Add multiple articles in one transaction:
-  {
-    const tx = db.transaction('articles', 'readwrite');
-    tx.store.add({
-      title: 'Article 2',
-      date: new Date('2019-01-01'),
-      body: '…',
-    });
-    tx.store.add({
-      title: 'Article 3',
-      date: new Date('2019-01-02'),
-      body: '…',
-    });
-    await tx.done;
-  }
-
-  // Get all the articles in date order:
-  console.log(await db.getAllFromIndex('articles', 'date'));
-
-  // Add 'And, happy new year!' to all articles on 2019-01-01:
-  {
-    const tx = db.transaction('articles', 'readwrite');
-    const index = tx.store.index('date');
-
-    for await (const cursor of index.iterate(new Date('2019-01-01'))) {
-      const article = { ...cursor.value };
-      article.body += ' And, happy new year!';
-      cursor.update(article);
-    }
-
-    await tx.done;
-  }
+  return db;
 }
 
-export default articleStore;
+async function findArticleByTitle(db, title) {
+  let article = null;
+  const tx = db.transaction(storeName);
+
+  for await (const cursor of tx.store) {
+    if (cursor.value.title === title) article = cursor.value;
+  }
+
+  return article;
+}
+
+export { initDB, findArticleByTitle };

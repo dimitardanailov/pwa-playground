@@ -1,5 +1,10 @@
+import { initDB, findArticleByTitle } from './IndexedDB/article-store';
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
+    // Init db
+    const db = await initDB();
+
     const titleTextField = document.getElementById('title');
     const articleSubmitButton = document.getElementById('articleSubmitButton');
 
@@ -10,8 +15,10 @@ if ('serviceWorker' in navigator) {
         e.preventDefault();
         const article = titleTextField.value;
 
-        // Send message to service worker
-        navigator.serviceWorker.controller.postMessage(article);
+        const dbArticle = await findArticleByTitle(db, article);
+        if (dbArticle === null) {
+          navigator.serviceWorker.controller.postMessage(article);
+        }
       });
     });
   });

@@ -1,5 +1,4 @@
 /* eslint-disable no-restricted-globals */
-
 console.log('Service worker -> IndexedDB playground waking up!');
 
 self.addEventListener('install', () => {
@@ -12,4 +11,5 @@ self.addEventListener('activate', () => {
 
 self.addEventListener('message', e => {
   console.log(`SW Received Message: ${e.data}`);
+  console.log(e);
 });

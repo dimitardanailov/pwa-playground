@@ -14,6 +14,16 @@ async function registerServiceWorker() {
   return promise;
 }
 
+async function articleDataBySW(channel) {
+  const promise = new Promise(resolve => {
+    channel.port1.onmessage = event => {
+      resolve(event.data.message);
+    };
+  });
+
+  return promise;
+}
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     // Init db
@@ -32,9 +42,10 @@ if ('serviceWorker' in navigator) {
       const dbArticle = await findArticleByTitle(db, title);
       if (dbArticle === null) {
         const channel = new MessageChannel();
-        channel.port1.onmessage = event => {
-          console.log('Response the SW : ', event.data.message);
-        };
+        articleDataBySW(channel).then(response => {
+          console.log('service worker response', response);
+        });
+
         navigator.serviceWorker.controller.postMessage(
           {
             command: 'addArticle',

@@ -52,6 +52,11 @@ async function findArticleByTitle(title) {
   return promise;
 }
 
+async function addArticleCommand(e) {
+  const records = await findArticleByTitle(e.data.title);
+  e.ports[0].postMessage({ records });
+}
+
 self.addEventListener('install', () => {
   console.log('Service Worker installed.');
 });
@@ -61,7 +66,7 @@ self.addEventListener('activate', () => {
 });
 
 self.addEventListener('message', async e => {
-  if (self.indexedDB) {
-    const records = await findArticleByTitle(e.data);
+  if (e.data.command === 'addArticle' && self.indexedDB) {
+    await addArticleCommand(e);
   }
 });

@@ -27,14 +27,24 @@ if ('serviceWorker' in navigator) {
 
     articleSubmitButton.addEventListener('click', async e => {
       e.preventDefault();
-      const article = titleTextField.value;
+      const title = titleTextField.value;
 
-      const dbArticle = await findArticleByTitle(db, article);
+      const dbArticle = await findArticleByTitle(db, title);
       if (dbArticle === null) {
-        navigator.serviceWorker.controller.postMessage(article);
+        const channel = new MessageChannel();
+        channel.port1.onmessage = event => {
+          console.log('Response the SW : ', event.data.message);
+        };
+        navigator.serviceWorker.controller.postMessage(
+          {
+            command: 'addArticle',
+            title,
+          },
+          [channel.port2]
+        );
       }
 
-      const dbArticles = await findArticlesByIndex(db, 'title', article);
+      const dbArticles = await findArticlesByIndex(db, 'title', title);
       console.log('articles', dbArticles);
     });
   });

@@ -40,4 +40,4 @@ async function findArticleByTitle(db, title) {
   return article;
 }
 
-export { initDB, findArticleByTitle, findArticlesByIndex, deleteArticleDB };
+export { initDB, findArticleByTitle, findArticlesByIndex };

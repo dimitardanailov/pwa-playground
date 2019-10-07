@@ -58,9 +58,34 @@ async function findArticleByTitle(title) {
   return promise;
 }
 
+async function createArticle(title) {
+  const store = await getArticleStore(DB_TRANSACTION_MODES.readwrite);
+
+  const promise = new Promise(resolve => {
+    store.add({
+      title,
+    }).onsuccess = e => {
+      console.log('e', e);
+      resolve(e.target.result);
+    };
+  });
+
+  return promise;
+}
+
 async function addArticleCommand(e) {
-  const records = await findArticleByTitle(e.data.title);
-  e.ports[0].postMessage({ records });
+  const { title } = e.data;
+  const records = await findArticleByTitle(title);
+  let response = records;
+  if (typeof records === 'undefined') {
+    const id = await createArticle(title);
+    response = {
+      id,
+      title,
+    };
+  }
+
+  e.ports[0].postMessage({ response });
 }
 
 self.addEventListener('install', () => {

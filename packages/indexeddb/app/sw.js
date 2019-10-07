@@ -7,6 +7,12 @@ const DB_CONFIG = {
   storeName: 'articles',
 };
 
+const DB_TRANSACTION_MODES = {
+  readonly: 'readonly',
+  readwrite: 'readwrite',
+  versionchange: 'versionchange',
+};
+
 /**
  * Source and idea:
  * https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB

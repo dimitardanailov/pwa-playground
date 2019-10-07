@@ -47,7 +47,7 @@ async function getArticleStore(mode) {
 }
 
 async function findArticleByTitle(title) {
-  const store = await getArticleStore();
+  const store = await getArticleStore(DB_TRANSACTION_MODES.readonly);
 
   const promise = new Promise(resolve => {
     store.get(title).onsuccess = e => {

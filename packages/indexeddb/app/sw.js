@@ -47,11 +47,19 @@ async function getArticleStore(mode) {
 }
 
 async function findArticleByTitle(title) {
-  const store = await getArticleStore(DB_TRANSACTION_MODES.readonly);
+  const objectStore = await getArticleStore(DB_TRANSACTION_MODES.readonly);
+  const index = objectStore.index('title');
 
-  const promise = new Promise(resolve => {
-    store.get(title).onsuccess = e => {
+  const promise = new Promise((resolve, reject) => {
+    const getRequest = index.get(title);
+
+    getRequest.onsuccess = e => {
       resolve(e.target.result);
+    };
+
+    getRequest.onerror = e => {
+      console.error(e);
+      reject(e);
     };
   });
 
@@ -61,12 +69,19 @@ async function findArticleByTitle(title) {
 async function createArticle(title) {
   const store = await getArticleStore(DB_TRANSACTION_MODES.readwrite);
 
-  const promise = new Promise(resolve => {
-    store.add({
+  const promise = new Promise((resolve, reject) => {
+    const requestAdd = store.add({
       title,
-    }).onsuccess = e => {
+    });
+
+    requestAdd.onsuccess = e => {
       console.log('e', e);
       resolve(e.target.result);
+    };
+
+    requestAdd.onerror = err => {
+      console.error(err);
+      reject(err);
     };
   });
 
@@ -77,6 +92,7 @@ async function addArticleCommand(e) {
   const { title } = e.data;
   const records = await findArticleByTitle(title);
   let response = records;
+
   if (typeof records === 'undefined') {
     const id = await createArticle(title);
     response = {
@@ -85,7 +101,7 @@ async function addArticleCommand(e) {
     };
   }
 
-  e.ports[0].postMessage({ response });
+  e.ports[0].postMessage(response);
 }
 
 self.addEventListener('install', () => {

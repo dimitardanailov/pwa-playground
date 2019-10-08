@@ -106,6 +106,9 @@ async function addArticleCommand(e) {
 
 self.addEventListener('install', () => {
   console.log('Service Worker installed.');
+
+  // ONLY DEV MODE
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', () => {
@@ -113,7 +116,9 @@ self.addEventListener('activate', () => {
 });
 
 self.addEventListener('message', async e => {
+  console.log('command:', e.data.command);
   if (e.data.command === 'addArticle' && self.indexedDB) {
+    console.log('event', e);
     await addArticleCommand(e);
   }
 });

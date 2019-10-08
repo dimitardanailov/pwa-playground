@@ -4,6 +4,21 @@ import {
   findArticlesByIndex,
 } from './IndexedDB/article-store';
 
+async function removeOldServiceWorkers() {
+  const promise = new Promise(resolve => {
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      for (const registration of registrations) {
+        console.log('remove service workers !!!!');
+        registration.unregister();
+      }
+
+      resolve();
+    });
+  });
+
+  return promise;
+}
+
 async function registerServiceWorker() {
   const promise = new Promise(resolve => {
     navigator.serviceWorker.register('/sw.js').then(swReg => {
@@ -28,6 +43,8 @@ async function swComponents() {
   const titleTextField = document.getElementById('swArticleTitle');
   const articleSubmitButton = document.getElementById('swArticleSubmitButton');
   const codeComponent = document.getElementById('swArticleCode');
+
+  removeOldServiceWorkers();
 
   const worker = await registerServiceWorker();
   console.log('Service Worker is registered', worker);

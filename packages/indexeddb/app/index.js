@@ -1,8 +1,4 @@
-import {
-  initDB,
-  findArticleByTitle,
-  findArticlesByIndex,
-} from './IndexedDB/article-store';
+import { initDB, findArticlesByIndex } from './IndexedDB/article-store';
 
 async function removeOldServiceWorkers() {
   const promise = new Promise(resolve => {
@@ -69,42 +65,25 @@ async function swComponents() {
   });
 }
 
+async function indexDBOnlyComponents() {
+  const db = await initDB();
+
+  const submitButton = document.getElementById('indexdbArticleSubmitButton');
+  const codeComponent = document.getElementById('indexdbArticleCode');
+
+  submitButton.addEventListener('click', async e => {
+    e.preventDefault();
+    const title = 'My article';
+
+    const dbArticles = await findArticlesByIndex(db, 'title', title);
+
+    codeComponent.innerHTML = JSON.stringify(dbArticles);
+  });
+}
+
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', async () => {
     swComponents();
-
-    // Init db
-    /*
-    const db = await initDB();
-
-    const titleTextField = document.getElementById('swArticleTitle');
-    const articleSubmitButton = document.getElementById('articleSubmitButton');
-
-    const worker = await registerServiceWorker();
-    console.log('Service Worker is registered', worker);
-
-    articleSubmitButton.addEventListener('click', async e => {
-      e.preventDefault();
-      const title = titleTextField.value;
-
-      const dbArticle = await findArticleByTitle(db, title);
-      if (dbArticle === null) {
-        const channel = new MessageChannel();
-        articleDataBySW(channel).then(response => {
-          console.log('service worker response', response);
-        });
-
-        navigator.serviceWorker.controller.postMessage(
-          {
-            command: 'addArticle',
-            title,
-          },
-          [channel.port2]
-        );
-      }
-
-      const dbArticles = await findArticlesByIndex(db, 'title', title);
-      console.log('articles', dbArticles);
-    }); */
+    indexDBOnlyComponents();
   });
 }

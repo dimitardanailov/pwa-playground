@@ -1,4 +1,4 @@
-import { initDB, findArticlesByIndex } from './IndexedDB/article-store';
+import { findOrcreateRecord } from './IndexedDB/article-store';
 
 async function removeOldServiceWorkers() {
   const promise = new Promise(resolve => {
@@ -66,8 +66,6 @@ async function swComponents() {
 }
 
 async function indexDBOnlyComponents() {
-  const db = await initDB();
-
   const submitButton = document.getElementById('indexdbArticleSubmitButton');
   const codeComponent = document.getElementById('indexdbArticleCode');
 
@@ -75,9 +73,8 @@ async function indexDBOnlyComponents() {
     e.preventDefault();
     const title = 'My article';
 
-    const dbArticles = await findArticlesByIndex(db, 'title', title);
-
-    codeComponent.innerHTML = JSON.stringify(dbArticles);
+    const dbArticle = await findOrcreateRecord(title);
+    codeComponent.innerHTML = JSON.stringify(dbArticle);
   });
 }
 

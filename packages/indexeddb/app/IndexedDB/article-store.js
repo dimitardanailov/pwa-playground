@@ -40,4 +40,17 @@ async function findArticleByTitle(db, title) {
   return article;
 }
 
-export { initDB, findArticleByTitle, findArticlesByIndex };
+async function findOrcreateRecord(title) {
+  const db = await initDB();
+
+  let article = findArticlesByIndex(db, 'title', title);
+  if (article === null) {
+    db.add({ title })
+      .then(response => (article = response))
+      .catch(e => console.log(e));
+  }
+
+  return article;
+}
+
+export { initDB, findArticleByTitle, findArticlesByIndex, findOrcreateRecord };

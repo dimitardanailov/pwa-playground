@@ -42,17 +42,23 @@ async function findArticleByTitle(db, title) {
   return article;
 }
 
+async function createArticle(db, title) {
+  const id = await db.add(storeName, { title });
+
+  console.log('id', id);
+
+  return {
+    id,
+    title,
+  };
+}
+
 async function findOrcreateRecord(title) {
   const db = await initDB();
 
   let article = await findArticlesByIndex(db, 'title', title);
   if (article === null) {
-    db.add({ title })
-      .then(response => {
-        console.log('response', response);
-        article = response;
-      })
-      .catch(e => console.log(e));
+    article = await createArticle(db, title);
   }
 
   return article;

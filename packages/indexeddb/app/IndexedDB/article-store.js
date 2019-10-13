@@ -24,7 +24,9 @@ async function initDB() {
 
 async function findArticlesByIndex(db, indexName, search) {
   const index = db.transaction(storeName).store.index(indexName);
-  const records = index.get(search);
+  const records = await index.get(search);
+
+  if (typeof records === 'undefined') return null;
 
   return records;
 }
@@ -43,10 +45,13 @@ async function findArticleByTitle(db, title) {
 async function findOrcreateRecord(title) {
   const db = await initDB();
 
-  let article = findArticlesByIndex(db, 'title', title);
+  let article = await findArticlesByIndex(db, 'title', title);
   if (article === null) {
     db.add({ title })
-      .then(response => (article = response))
+      .then(response => {
+        console.log('response', response);
+        article = response;
+      })
       .catch(e => console.log(e));
   }
 

@@ -66,12 +66,13 @@ async function swComponents() {
 }
 
 async function indexDBOnlyComponents() {
+  const textField = document.getElementById('indexdbArticleTextField');
   const submitButton = document.getElementById('indexdbArticleSubmitButton');
   const codeComponent = document.getElementById('indexdbArticleCode');
 
   submitButton.addEventListener('click', async e => {
     e.preventDefault();
-    const title = 'My article';
+    const title = textField.value;
 
     const dbArticle = await findOrcreateRecord(title);
     codeComponent.innerHTML = JSON.stringify(dbArticle);

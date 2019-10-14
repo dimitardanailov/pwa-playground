@@ -105,14 +105,13 @@ async function addArticleCommand(e) {
 }
 
 self.addEventListener('install', () => {
-  console.log('Service Worker installed.');
-
   // ONLY DEV MODE
   self.skipWaiting();
 });
 
-self.addEventListener('activate', () => {
-  console.log('Service Worker activating.');
+self.addEventListener('activate', e => {
+  // eslint-disable-next-line no-undef
+  e.waitUntil(clients.claim());
 });
 
 self.addEventListener('message', async e => {

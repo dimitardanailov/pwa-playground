@@ -4,7 +4,6 @@ async function removeOldServiceWorkers() {
   const promise = new Promise(resolve => {
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
       for (const registration of registrations) {
-        console.log('remove service workers !!!!');
         registration.unregister();
       }
 
@@ -40,10 +39,9 @@ async function swComponents() {
   const articleSubmitButton = document.getElementById('swArticleSubmitButton');
   const codeComponent = document.getElementById('swArticleCode');
 
-  removeOldServiceWorkers();
+  await removeOldServiceWorkers();
 
-  const worker = await registerServiceWorker();
-  console.log('Service Worker is registered', worker);
+  await registerServiceWorker();
 
   articleSubmitButton.addEventListener('click', async e => {
     e.preventDefault();
@@ -51,7 +49,6 @@ async function swComponents() {
 
     const channel = new MessageChannel();
     articleDataBySW(channel).then(response => {
-      console.log('response', response);
       codeComponent.innerHTML = JSON.stringify(response);
     });
 
